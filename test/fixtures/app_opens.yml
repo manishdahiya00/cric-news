@@ -1,0 +1,23 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  device_id: MyString
+  version_name: MyString
+  version_code: MyString
+  security_token: MyString
+  app_url: MyString
+  social_name: MyString
+  social_img_url: MyString
+  social_email: MyString
+  force_update: MyString
+
+two:
+  device_id: MyString
+  version_name: MyString
+  version_code: MyString
+  security_token: MyString
+  app_url: MyString
+  social_name: MyString
+  social_img_url: MyString
+  social_email: MyString
+  force_update: MyString
