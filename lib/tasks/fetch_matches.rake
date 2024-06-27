@@ -41,6 +41,7 @@ namespace :fetchMatches do
                 status = "Upcoming"
               end
             match.update(
+              status: status,
               title: match_data["title"],
               short_title: match_data["short_title"],
               match_type: match_data["format_str"],

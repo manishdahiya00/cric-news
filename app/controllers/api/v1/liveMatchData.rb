@@ -48,7 +48,105 @@ module API
                 teamb: scorecard_data["response"]["innings"][1]
               }
             }
-            {status: 200, message: MSG_SUCCESS, matchData: data}
+            teama_innings = scorecard_data["response"]["innings"][0]
+
+            teama_batsman_total_runs = 0
+            teama_batsman_total_balls = 0
+            teama_batsman_total_fours = 0
+            teama_batsman_total_sixes = 0
+            teama_batsman_total_strike_rate = 0.0
+            teama_batsman_count = 0
+
+            teama_bowlers_total_runs = 0
+            teama_bowlers_total_balls = 0
+            teama_bowlers_total_fours = 0
+            teama_bowlers_total_sixes = 0
+            teama_bowlers_total_strike_rate = 0.0
+            teama_bowlers_batsman_count = 0
+
+            teama_innings["batsmen"].each do |batsman|
+              teama_batsman_total_runs += batsman["runs"].to_i
+              teama_batsman_total_balls += batsman["balls"].to_i
+              teama_batsman_total_fours += batsman["fours"].to_i
+              teama_batsman_total_sixes += batsman["sixes"].to_i
+              teama_batsman_total_strike_rate += batsman["strike_rate"].to_f
+              teama_batsman_count += 1
+            end
+            teama_innings["bowlers"].each do |bowler|
+              teama_bowlers_total_runs += bowler["runs"].to_i
+              teama_bowlers_total_balls += bowler["balls"].to_i
+              teama_bowlers_total_fours += bowler["fours"].to_i
+              teama_bowlers_total_sixes += bowler["sixes"].to_i
+              teama_bowlers_total_strike_rate += bowler["strike_rate"].to_f
+              teama_bowlers_batsman_count += 1
+            end
+
+            teamb_innings = scorecard_data["response"]["innings"][0]
+
+            teamb_batsman_total_runs = 0
+            teamb_batsman_total_balls = 0
+            teamb_batsman_total_fours = 0
+            teamb_batsman_total_sixes = 0
+            teamb_batsman_total_strike_rate = 0.0
+            teamb_batsman_count = 0
+
+            teamb_bowlers_total_runs = 0
+            teamb_bowlers_total_balls = 0
+            teamb_bowlers_total_fours = 0
+            teamb_bowlers_total_sixes = 0
+            teamb_bowlers_total_strike_rate = 0.0
+            teamb_bowlers_count = 0
+
+            teamb_innings["batsmen"].each do |batsman|
+              teamb_batsman_total_runs += batsman["runs"].to_i
+              teamb_batsman_total_balls += batsman["balls"].to_i
+              teamb_batsman_total_fours += batsman["fours"].to_i
+              teamb_batsman_total_sixes += batsman["sixes"].to_i
+              teamb_batsman_total_strike_rate += batsman["strike_rate"].to_f
+              teamb_batsman_count += 1
+            end
+
+            teamb_innings["bowlers"].each do |bowler|
+              teamb_bowlers_total_runs += bowler["runs"].to_i
+              teamb_bowlers_total_balls += bowler["balls"].to_i
+              teamb_bowlers_total_fours += bowler["fours"].to_i
+              teamb_bowlers_total_sixes += bowler["sixes"].to_i
+              teamb_bowlers_total_strike_rate += bowler["strike_rate"].to_f
+              teamb_bowlers_count += 1
+            end
+
+            teama_batsman_average_strike_rate = teama_batsman_count > 0 ? teama_batsman_total_strike_rate / teama_batsman_count : 0
+            teama_bowlers_average_strike_rate = teama_batsman_count > 0 ? teama_bowlers_total_strike_rate / teama_batsman_count : 0
+            teamb_batsman_average_strike_rate = teamb_batsman_count > 0 ? teamb_batsman_total_strike_rate / teamb_batsman_count : 0
+            teamb_bowlers_average_strike_rate = teamb_batsman_count > 0 ? teamb_bowlers_total_strike_rate / teamb_batsman_count : 0
+            teama_batsman_totals = {
+              total_runs: teama_batsman_total_runs,
+              total_balls: teama_batsman_total_balls,
+              total_fours: teama_batsman_total_fours,
+              total_sixes: teama_batsman_total_sixes,
+              average_strike_rate: teama_batsman_average_strike_rate
+            }
+            teama_bowlers_totals = {
+              total_runs: teama_bowlers_total_runs,
+              total_fours: teama_bowlers_total_fours,
+              total_sixes: teama_bowlers_total_sixes,
+              average_strike_rate: teama_bowlers_average_strike_rate
+            }
+            teamb_batsman_totals = {
+              total_runs: teama_batsman_total_runs,
+              total_balls: teama_batsman_total_balls,
+              total_fours: teama_batsman_total_fours,
+              total_sixes: teama_batsman_total_sixes,
+              average_strike_rate: teamb_batsman_average_strike_rate
+            }
+            teamb_bowlers_totals = {
+              total_runs: teamb_bowlers_total_runs,
+              total_balls: teamb_bowlers_total_balls,
+              total_fours: teamb_bowlers_total_fours,
+              total_sixes: teamb_bowlers_total_sixes,
+              average_strike_rate: teamb_bowlers_average_strike_rate
+            }
+            {status: 200, message: MSG_SUCCESS, matchData: data,teama__batsman_total: teama_batsman_totals,teamb__batsman_total: teamb_batsman_totals,teama__bowlers_total: teama_bowlers_totals,teamb__bowlers_total: teamb_bowlers_totals}
            else
             {status: 500, message: "No Device Found"}
            end
