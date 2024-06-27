@@ -6,5 +6,6 @@ module API
       mount API::V1::LiveMatchData
       mount API::V1::Search
       mount API::V1::DatewiseUpdates
+      mount API::V1::PlayerData
     end
 end
