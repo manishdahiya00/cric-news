@@ -41,11 +41,11 @@ module API
               teama_scores: match.teama_scores_full,
               teamb_scores: match.teamb_scores_full,
               match_type: match.match_type,
-              teama_players: teama,
-              teamb_players: teamb,
+              teama_players: teama || [],
+              teamb_players: teamb || [],
               scores: {
-                teama: scorecard_data["response"]["innings"][0],
-                teamb: scorecard_data["response"]["innings"][1]
+                teama: scorecard_data["response"]["innings"][0] || [],
+                teamb: scorecard_data["response"]["innings"][1] || []
               }
             }
             teama_innings = scorecard_data["response"]["innings"][0]
