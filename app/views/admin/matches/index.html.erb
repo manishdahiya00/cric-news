@@ -1,0 +1,57 @@
+<!-- app/views/matches/index.html.erb -->
+<!-- Page Content -->
+<div id="page-wrapper">
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-lg-12">
+        <h2 class="page-header">Matches Index</h2>
+      </div>
+      <div class="col-lg-12">
+        <% if @matches.any? %>
+          <table class="table table-responsive table-bordered">
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>Title</th>
+                <th>Status</th>
+                <th>Match Type</th>
+                <th>Team A</th>
+                <th>Team B</th>
+                <th>Venue</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              <% @matches.each do |match| %>
+                <tr>
+                  <td><%= match.id %></td>
+                  <td><%= match.title %></td>
+                  <td>
+                    <% if match.status == "Live" %>
+                      <p class="text-danger"><%= match.status %></p>
+                    <% elsif match.status == "Completed" %>
+                      <p class="text-success"><%= match.status %></p>
+                    <% else %>
+                      <p class="text-yellow"><%= match.status %></p>
+                    <% end %>
+                  </td>
+                  <td><%= match.match_type %></td>
+                  <td><%= match.teama_name %></td>
+                  <td><%= match.teamb_name %></td>
+                  <td><%= match.venue_name %></td>
+                  <td>
+                    <div style="display:flex;gap:5px;">
+                      <%= link_to 'Show', admin_match_path(match), class: 'btn btn-primary btn-sm' %>
+                    </td>
+                  </tr>
+                <% end %>
+              </tbody>
+            </table>
+            <%= will_paginate @matches %>
+          <% else %>
+            <h3>No matches found.</h3>
+          <% end %>
+        </div>
+      </div>
+    </div>
+  </div>

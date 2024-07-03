@@ -68,4 +68,5 @@ end
 
 gem "rest-client", "~> 2.1"
 gem "grape", "~> 2.0"
-gem 'gemini-ai', '~> 4.0.0'
+gem "gemini-ai", "~> 4.0.0"
+gem "will_paginate"

@@ -7,8 +7,7 @@ class Admin::LoginController < ApplicationController
       session[:admin_authenticated] = true
       redirect_to admin_dashboard_path
     else
-      flash.now[:notice] = "Invalid email or password"
-      render :new
+      redirect_to admin_path, notice: "Invalid email or password"
     end
   end
 

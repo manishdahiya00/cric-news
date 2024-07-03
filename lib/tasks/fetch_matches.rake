@@ -5,11 +5,14 @@ namespace :fetchMatches do
       url = "https://rest.entitysport.com/v2/matches/?status=1&token=e9a8cd857f01e5f88127787d3931b63a"
       res = RestClient.get(url)
       response = JSON.parse(res)
-      if response["response"] && response["response"]["items"]
+
+      if response.dig("response", "items")
         response["response"]["items"].each do |match_data|
           next if match_data.nil?
+
           match = Match.find_by(mid: match_data["match_id"])
-          unless match.present?
+
+          unless match
             Match.create(
               status: "Upcoming",
               mid: match_data["match_id"],
@@ -17,64 +20,70 @@ namespace :fetchMatches do
               title: match_data["title"],
               short_title: match_data["short_title"],
               match_type: match_data["format_str"],
-              teama_name: match_data["teama"]["name"],
-              teama_logo: match_data["teama"]["logo_url"],
-              teamb_name: match_data["teamb"]["name"],
-              teamb_logo: match_data["teamb"]["logo_url"],
-              venue_name: match_data["venue"]["name"],
-              venue_location: match_data["venue"]["location"],
-              venue_country: match_data["venue"]["country"],
-              teama_scores_full: match_data["teama"]["scores_full"] || "null",
-              teama_scores: match_data["teama"]["scores"] || "--",
-              teama_overs: match_data["teama"]["overs"] || "--",
-              teamb_scores_full: match_data["teamb"]["scores_full"] || "null",
-              teamb_scores: match_data["teamb"]["scores"] || "--",
-              teamb_overs: match_data["teamb"]["overs"] || "--",
+              teama_name: match_data.dig("teama", "name"),
+              teama_logo: match_data.dig("teama", "logo_url"),
+              teamb_name: match_data.dig("teamb", "name"),
+              teamb_logo: match_data.dig("teamb", "logo_url"),
+              venue_name: match_data.dig("venue", "name"),
+              venue_location: match_data.dig("venue", "location"),
+              venue_country: match_data.dig("venue", "country"),
+              teama_scores_full: match_data.dig("teama", "scores_full") || "null",
+              teama_scores: match_data.dig("teama", "scores") || "--",
+              teama_overs: match_data.dig("teama", "overs") || "--",
+              teamb_scores_full: match_data.dig("teamb", "scores_full") || "null",
+              teamb_scores: match_data.dig("teamb", "scores") || "--",
+              teamb_overs: match_data.dig("teamb", "overs") || "--",
               match_time: match_data["date_start"],
               match_end_time: match_data["date_end"],
             )
-            puts "Hello from matchId: #{match_data["match_id"]}"
+            puts "Created new match with ID: #{match_data["match_id"]}"
           else
-            if match.match_end_time < Time.now && match.match_start_time > Time.now
-              status = "Live"
-            else
-              status = "Upcoming"
-            end
             match.update(
-              status: status,
+              status: "Upcoming",
               title: match_data["title"],
               short_title: match_data["short_title"],
               match_type: match_data["format_str"],
-              teama_name: match_data["teama"]["name"],
-              teama_logo: match_data["teama"]["logo_url"],
-              teamb_name: match_data["teamb"]["name"],
-              teamb_logo: match_data["teamb"]["logo_url"],
-              venue_name: match_data["venue"]["name"],
-              venue_location: match_data["venue"]["location"],
-              venue_country: match_data["venue"]["country"],
+              teama_name: match_data.dig("teama", "name"),
+              teama_logo: match_data.dig("teama", "logo_url"),
+              teamb_name: match_data.dig("teamb", "name"),
+              teamb_logo: match_data.dig("teamb", "logo_url"),
+              venue_name: match_data.dig("venue", "name"),
+              venue_location: match_data.dig("venue", "location"),
+              venue_country: match_data.dig("venue", "country"),
+              teama_scores_full: match_data.dig("teama", "scores_full") || "null",
+              teama_scores: match_data.dig("teama", "scores") || "--",
+              teama_overs: match_data.dig("teama", "overs") || "--",
+              teamb_scores_full: match_data.dig("teamb", "scores_full") || "null",
+              teamb_scores: match_data.dig("teamb", "scores") || "--",
+              teamb_overs: match_data.dig("teamb", "overs") || "--",
               match_time: match_data["date_start"],
+              match_end_time: match_data["date_end"],
             )
-            puts "Hello from updated matchId: #{match_data["match_id"]}"
+            puts "Updated match with ID: #{match_data["match_id"]}"
           end
         end
       else
         puts "Invalid response format"
       end
     rescue Exception => e
-      puts "API Exception-#{Time.now}-create-matches-Error-#{e}"
+      puts "API Exception - #{Time.now} - upcomingMatches - Error - #{e.message}"
     end
   end
+
   task liveMatches: :environment do
     begin
       require "rest-client"
       url = "https://rest.entitysport.com/v2/matches/?status=3&token=e9a8cd857f01e5f88127787d3931b63a"
       res = RestClient.get(url)
       response = JSON.parse(res)
-      if response["response"] && response["response"]["items"]
+
+      if response.dig("response", "items")
         response["response"]["items"].each do |match_data|
           next if match_data.nil?
+
           match = Match.find_by(mid: match_data["match_id"])
-          unless match.present?
+
+          unless match
             Match.create(
               status: "Live",
               mid: match_data["match_id"],
@@ -82,71 +91,72 @@ namespace :fetchMatches do
               title: match_data["title"],
               short_title: match_data["short_title"],
               match_type: match_data["format_str"],
-              teama_name: match_data["teama"]["name"],
-              teama_logo: match_data["teama"]["logo_url"],
-              teamb_name: match_data["teamb"]["name"],
-              teamb_logo: match_data["teamb"]["logo_url"],
-              venue_name: match_data["venue"]["name"],
-              venue_location: match_data["venue"]["location"],
-              venue_country: match_data["venue"]["country"],
-              teama_scores_full: match_data["teama"]["scores_full"] || "null",
-              teama_scores: match_data["teama"]["scores"] || "--",
-              teama_overs: match_data["teama"]["overs"] || "--",
-              teamb_scores_full: match_data["teamb"]["scores_full"] || "null",
-              teamb_scores: match_data["teamb"]["scores"] || "--",
-              teamb_overs: match_data["teamb"]["overs"] || "--",
+              teama_name: match_data.dig("teama", "name"),
+              teama_logo: match_data.dig("teama", "logo_url"),
+              teamb_name: match_data.dig("teamb", "name"),
+              teamb_logo: match_data.dig("teamb", "logo_url"),
+              venue_name: match_data.dig("venue", "name"),
+              venue_location: match_data.dig("venue", "location"),
+              venue_country: match_data.dig("venue", "country"),
+              teama_scores_full: match_data.dig("teama", "scores_full") || "null",
+              teama_scores: match_data.dig("teama", "scores") || "--",
+              teama_overs: match_data.dig("teama", "overs") || "--",
+              teamb_scores_full: match_data.dig("teamb", "scores_full") || "null",
+              teamb_scores: match_data.dig("teamb", "scores") || "--",
+              teamb_overs: match_data.dig("teamb", "overs") || "--",
               match_time: match_data["date_start"],
               match_end_time: match_data["date_end"],
             )
-            puts "Hello from matchId: #{match_data["match_id"]}"
+            puts "Created new live match with ID: #{match_data["match_id"]}"
           else
-            if match.match_end_time < Time.now
-              status = "Completed"
-            else
-              status = "Live"
-            end
+            status = match.match_end_time && match.match_end_time < Time.now ? "Completed" : "Live"
+
             match.update(
               status: status,
               title: match_data["title"],
               short_title: match_data["short_title"],
               match_type: match_data["format_str"],
-              teama_name: match_data["teama"]["name"],
-              teama_logo: match_data["teama"]["logo_url"],
-              teamb_name: match_data["teamb"]["name"],
-              teamb_logo: match_data["teamb"]["logo_url"],
-              venue_name: match_data["venue"]["name"],
-              venue_location: match_data["venue"]["location"],
-              venue_country: match_data["venue"]["country"],
-              teama_scores_full: match_data["teama"]["scores_full"] || "null",
-              teama_scores: match_data["teama"]["scores"] || "--",
-              teama_overs: match_data["teama"]["overs"] || "--",
-              teamb_scores_full: match_data["teamb"]["scores_full"] || "null",
-              teamb_scores: match_data["teamb"]["scores"] || "--",
-              teamb_overs: match_data["teamb"]["overs"] || "--",
+              teama_name: match_data.dig("teama", "name"),
+              teama_logo: match_data.dig("teama", "logo_url"),
+              teamb_name: match_data.dig("teamb", "name"),
+              teamb_logo: match_data.dig("teamb", "logo_url"),
+              venue_name: match_data.dig("venue", "name"),
+              venue_location: match_data.dig("venue", "location"),
+              venue_country: match_data.dig("venue", "country"),
+              teama_scores_full: match_data.dig("teama", "scores_full") || "null",
+              teama_scores: match_data.dig("teama", "scores") || "--",
+              teama_overs: match_data.dig("teama", "overs") || "--",
+              teamb_scores_full: match_data.dig("teamb", "scores_full") || "null",
+              teamb_scores: match_data.dig("teamb", "scores") || "--",
+              teamb_overs: match_data.dig("teamb", "overs") || "--",
               match_time: match_data["date_start"],
               match_end_time: match_data["date_end"],
             )
-            puts "Hello from updated matchId: #{match_data["match_id"]}"
+            puts "Updated live match with ID: #{match_data["match_id"]}"
           end
         end
       else
         puts "Invalid response format"
       end
     rescue Exception => e
-      puts "API Exception-#{Time.now}-create-matches-Error-#{e}"
+      puts "API Exception - #{Time.now} - liveMatches - Error - #{e.message}"
     end
   end
+
   task completedMatches: :environment do
     begin
       require "rest-client"
       url = "https://rest.entitysport.com/v2/matches/?status=2&token=e9a8cd857f01e5f88127787d3931b63a"
       res = RestClient.get(url)
       response = JSON.parse(res)
-      if response["response"] && response["response"]["items"]
+
+      if response.dig("response", "items")
         response["response"]["items"].each do |match_data|
           next if match_data.nil?
+
           match = Match.find_by(mid: match_data["match_id"])
-          unless match.present?
+
+          unless match
             Match.create(
               status: "Completed",
               mid: match_data["match_id"],
@@ -154,52 +164,100 @@ namespace :fetchMatches do
               title: match_data["title"],
               short_title: match_data["short_title"],
               match_type: match_data["format_str"],
-              teama_name: match_data["teama"]["name"],
-              teama_logo: match_data["teama"]["logo_url"],
-              teamb_name: match_data["teamb"]["name"],
-              teamb_logo: match_data["teamb"]["logo_url"],
-              venue_name: match_data["venue"]["name"],
-              venue_location: match_data["venue"]["location"],
-              venue_country: match_data["venue"]["country"],
-              teama_scores_full: match_data["teama"]["scores_full"] || "null",
-              teama_scores: match_data["teama"]["scores"] || "--",
-              teama_overs: match_data["teama"]["overs"] || "--",
-              teamb_scores_full: match_data["teamb"]["scores_full"] || "null",
-              teamb_scores: match_data["teamb"]["scores"] || "--",
-              teamb_overs: match_data["teamb"]["overs"] || "--",
+              teama_name: match_data.dig("teama", "name"),
+              teama_logo: match_data.dig("teama", "logo_url"),
+              teamb_name: match_data.dig("teamb", "name"),
+              teamb_logo: match_data.dig("teamb", "logo_url"),
+              venue_name: match_data.dig("venue", "name"),
+              venue_location: match_data.dig("venue", "location"),
+              venue_country: match_data.dig("venue", "country"),
+              teama_scores_full: match_data.dig("teama", "scores_full") || "null",
+              teama_scores: match_data.dig("teama", "scores") || "--",
+              teama_overs: match_data.dig("teama", "overs") || "--",
+              teamb_scores_full: match_data.dig("teamb", "scores_full") || "null",
+              teamb_scores: match_data.dig("teamb", "scores") || "--",
+              teamb_overs: match_data.dig("teamb", "overs") || "--",
               match_time: match_data["date_start"],
               match_end_time: match_data["date_end"],
             )
-            puts "Hello from matchId: #{match_data["match_id"]}"
+            puts "Created new completed match with ID: #{match_data["match_id"]}"
           else
             match.update(
+              status: "Completed",
               title: match_data["title"],
               short_title: match_data["short_title"],
               match_type: match_data["format_str"],
-              teama_name: match_data["teama"]["name"],
-              teama_logo: match_data["teama"]["logo_url"],
-              teamb_name: match_data["teamb"]["name"],
-              teamb_logo: match_data["teamb"]["logo_url"],
-              venue_name: match_data["venue"]["name"],
-              venue_location: match_data["venue"]["location"],
-              venue_country: match_data["venue"]["country"],
-              teama_scores_full: match_data["teama"]["scores_full"] || "null",
-              teama_scores: match_data["teama"]["scores"] || "--",
-              teama_overs: match_data["teama"]["overs"] || "--",
-              teamb_scores_full: match_data["teamb"]["scores_full"] || "null",
-              teamb_scores: match_data["teamb"]["scores"] || "--",
-              teamb_overs: match_data["teamb"]["overs"] || "--",
+              teama_name: match_data.dig("teama", "name"),
+              teama_logo: match_data.dig("teama", "logo_url"),
+              teamb_name: match_data.dig("teamb", "name"),
+              teamb_logo: match_data.dig("teamb", "logo_url"),
+              venue_name: match_data.dig("venue", "name"),
+              venue_location: match_data.dig("venue", "location"),
+              venue_country: match_data.dig("venue", "country"),
+              teama_scores_full: match_data.dig("teama", "scores_full") || "null",
+              teama_scores: match_data.dig("teama", "scores") || "--",
+              teama_overs: match_data.dig("teama", "overs") || "--",
+              teamb_scores_full: match_data.dig("teamb", "scores_full") || "null",
+              teamb_scores: match_data.dig("teamb", "scores") || "--",
+              teamb_overs: match_data.dig("teamb", "overs") || "--",
               match_time: match_data["date_start"],
               match_end_time: match_data["date_end"],
             )
-            puts "Hello from updated matchId: #{match_data["match_id"]}"
+            puts "Updated completed match with ID: #{match_data["match_id"]}"
           end
         end
       else
         puts "Invalid response format"
       end
     rescue Exception => e
-      puts "API Exception-#{Time.now}-create-matches-Error-#{e}"
+      puts "API Exception - #{Time.now} - completedMatches - Error - #{e.message}"
+    end
+  end
+
+  task updateMatches: :environment do
+    begin
+      matches = Match.all
+
+      matches.each do |match|
+        next if match.nil?
+
+        date_start = match.match_time
+        date_end = match.match_end_time
+
+        status = if date_end && date_end < Time.now
+            "Completed"
+          elsif date_start && date_start > Time.now
+            "Upcoming"
+          else
+            "Live"
+          end
+
+        match.update(
+          status: status,
+          title: match.title,
+          short_title: match.short_title,
+          match_type: match.match_type,
+          teama_name: match.teama_name,
+          teama_logo: match.teama_logo,
+          teamb_name: match.teamb_name,
+          teamb_logo: match.teamb_logo,
+          venue_name: match.venue_name,
+          venue_location: match.venue_location,
+          venue_country: match.venue_country,
+          teama_scores_full: match.teama_scores_full || "null",
+          teama_scores: match.teama_scores || "--",
+          teama_overs: match.teama_overs || "--",
+          teamb_scores_full: match.teamb_scores_full || "null",
+          teamb_scores: match.teamb_scores || "--",
+          teamb_overs: match.teamb_overs || "--",
+          match_time: date_start,
+          match_end_time: date_end,
+        )
+
+        puts "Updated match with ID: #{match.id} - Status: #{status}"
+      end
+    rescue StandardError => e
+      puts "API Exception - #{Time.now} - updateMatches - Error - #{e.message}"
     end
   end
 end

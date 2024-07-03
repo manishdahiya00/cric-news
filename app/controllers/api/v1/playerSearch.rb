@@ -22,12 +22,12 @@ module API
 
               case
               when params[:playerName].present?
-                players = fetch_players("search=#{params[:playerName]}&page=#{params[:page]}&country=#{params[:country]}")
+                players = fetch_players("search=#{params[:playerName]}&paged=#{params[:page]}&country=#{params[:country]}")
               when params[:nationality].present?
-                players = fetch_players("country=#{params[:nationality]}&page=#{params[:page]}&search=#{params[:playingRole]}")
+                players = fetch_players("country=#{params[:nationality]}&paged=#{params[:page]}&search=#{params[:playingRole]}")
               when params[:playingRole].present?
                 image = "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Ftse1.mm.bing.net%2Fth%3Fid%3DOIP.Szj0UBb1RxBc_-Oh3x4HpwHaEK%26pid%3DApi%26h%3D160&f=1&ipt=be7b6d5d923373168da3040ab69c805162309554986cea46bdca04a88c7d8007&ipo=images"
-                res = RestClient.get("https://rest.entitysport.com/v2/players?token=e9a8cd857f01e5f88127787d3931b63a&country=#{params[:nationality]}&page=#{params[:page]}&search=#{params[:playingRole]}")
+                res = RestClient.get("https://rest.entitysport.com/v2/players?token=e9a8cd857f01e5f88127787d3931b63a&country=#{params[:nationality]}&paged=#{params[:page]}&search=#{params[:playingRole]}")
                 all_players = JSON.parse(res)
                 players = all_players["response"]["items"].select do |player|
                   player["playing_role"] == params[:playingRole]
