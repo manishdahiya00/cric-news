@@ -60,7 +60,6 @@ module API
         def fetch_players(param)
           image = "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Ftse1.mm.bing.net%2Fth%3Fid%3DOIP.Szj0UBb1RxBc_-Oh3x4HpwHaEK%26pid%3DApi%26h%3D160&f=1&ipt=be7b6d5d923373168da3040ab69c805162309554986cea46bdca04a88c7d8007&ipo=images"
           response = RestClient.get("https://rest.entitysport.com/v2/players?token=e9a8cd857f01e5f88127787d3931b63a&#{param}")
-          puts "https://rest.entitysport.com/v2/players?token=e9a8cd857f01e5f88127787d3931b63a&#{param}"
           players_data = JSON.parse(response.body)["response"]["items"]
           players = players_data.map do |player|
             {
