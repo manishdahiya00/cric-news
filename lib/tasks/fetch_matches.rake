@@ -31,15 +31,15 @@ namespace :fetchMatches do
               teamb_scores: match_data["teamb"]["scores"] || "--",
               teamb_overs: match_data["teamb"]["overs"] || "--",
               match_time: match_data["date_start"],
-              match_end_time: match_data["date_end"]
+              match_end_time: match_data["date_end"],
             )
             puts "Hello from matchId: #{match_data["match_id"]}"
           else
             if match.match_end_time < Time.now && match.match_start_time > Time.now
-              status =  "Live"
-              else
-                status = "Upcoming"
-              end
+              status = "Live"
+            else
+              status = "Upcoming"
+            end
             match.update(
               status: status,
               title: match_data["title"],
@@ -52,7 +52,7 @@ namespace :fetchMatches do
               venue_name: match_data["venue"]["name"],
               venue_location: match_data["venue"]["location"],
               venue_country: match_data["venue"]["country"],
-              match_time: match_data["date_start"]
+              match_time: match_data["date_start"],
             )
             puts "Hello from updated matchId: #{match_data["match_id"]}"
           end
@@ -96,15 +96,15 @@ namespace :fetchMatches do
               teamb_scores: match_data["teamb"]["scores"] || "--",
               teamb_overs: match_data["teamb"]["overs"] || "--",
               match_time: match_data["date_start"],
-              match_end_time: match_data["date_end"]
+              match_end_time: match_data["date_end"],
             )
             puts "Hello from matchId: #{match_data["match_id"]}"
           else
-              if match.match_end_time < Time.now
-              status =  "Completed"
-              else
-                status = "Live"
-              end
+            if match.match_end_time < Time.now
+              status = "Completed"
+            else
+              status = "Live"
+            end
             match.update(
               status: status,
               title: match_data["title"],
@@ -124,7 +124,7 @@ namespace :fetchMatches do
               teamb_scores: match_data["teamb"]["scores"] || "--",
               teamb_overs: match_data["teamb"]["overs"] || "--",
               match_time: match_data["date_start"],
-              match_end_time: match_data["date_end"]
+              match_end_time: match_data["date_end"],
             )
             puts "Hello from updated matchId: #{match_data["match_id"]}"
           end
@@ -168,7 +168,7 @@ namespace :fetchMatches do
               teamb_scores: match_data["teamb"]["scores"] || "--",
               teamb_overs: match_data["teamb"]["overs"] || "--",
               match_time: match_data["date_start"],
-              match_end_time: match_data["date_end"]
+              match_end_time: match_data["date_end"],
             )
             puts "Hello from matchId: #{match_data["match_id"]}"
           else
@@ -190,7 +190,7 @@ namespace :fetchMatches do
               teamb_scores: match_data["teamb"]["scores"] || "--",
               teamb_overs: match_data["teamb"]["overs"] || "--",
               match_time: match_data["date_start"],
-              match_end_time: match_data["date_end"]
+              match_end_time: match_data["date_end"],
             )
             puts "Hello from updated matchId: #{match_data["match_id"]}"
           end

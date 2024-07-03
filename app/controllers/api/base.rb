@@ -9,5 +9,6 @@ module API
     mount API::V1::PlayerData
     mount API::V1::AllPlayers
     mount API::V1::PlayerSearch
+    mount API::V1::LeaguesData
   end
 end

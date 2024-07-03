@@ -3,13 +3,12 @@ module API
     class AppOpenApi < Grape::API
       include API::V1::Defaults
 
-
       #####################################################################
-		  #############	====>    	    	App Open API
-			#####################################################################
+      #############	====>    	    	App Open API
+      #####################################################################
 
       resource :appOpen do
-        before {api_params}
+        before { api_params }
 
         params do
           use :common_params
@@ -21,26 +20,22 @@ module API
         end
         post do
           begin
-            @device_detail = DeviceDetail.find_by(device_id: params[:deviceId],security_token: params[:securityToken])
-            @app_open = AppOpen.find_by(device_id: params[:deviceId],security_token: params[:securityToken])
+            @device_detail = DeviceDetail.find_by(device_id: params[:deviceId], security_token: params[:securityToken])
             unless @device_detail.present?
-              {status: 500, message: MSG_ERROR, error: "No Device Found"}
+              { status: 500, message: MSG_ERROR, error: "No Device Found" }
             else
-             unless @app_open.present?
-              @new_app_open = AppOpen.create(
+              @app_open = AppOpen.create(
                 device_id: params[:deviceId],
                 version_name: params[:versionName],
                 version_code: params[:versionCode],
-                security_token: params[:securityToken]
+                security_token: params[:securityToken],
+                source_ip: request.ip,
               )
-              {status: 200, message: MSG_SUCCESS,socialName: @new_app_open.social_name, socialEmail: @new_app_open.social_email,socialImgUrl: @new_app_open.social_img_url,appUrl:@new_app_open.app_url,forceUpdate:@new_app_open.force_update}
-             else
-              {status: 200, message: MSG_SUCCESS,socialName: @app_open.social_name, socialEmail: @app_open.social_email,socialImgUrl: @app_open.social_img_url,appUrl:@app_open.app_url,forceUpdate:@app_open.force_update}
-             end
+              { status: 200, message: MSG_SUCCESS, socialName: @app_open.social_name, socialEmail: @app_open.social_email, socialImgUrl: @app_open.social_img_url, appUrl: @app_open.app_url, forceUpdate: @app_open.force_update }
             end
           rescue Exception => e
             Rails.logger.error "API Exception => #{Time.now} --- appOpenApi --- Params: #{params.inspect}  Error: #{e.message}"
-            {status: 500, message: MSG_ERROR, error: e}
+            { status: 500, message: MSG_ERROR, error: e }
           end
         end
       end

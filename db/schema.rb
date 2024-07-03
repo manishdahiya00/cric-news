@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2024_06_17_120343) do
+ActiveRecord::Schema[7.1].define(version: 2024_07_01_110610) do
   create_table "app_opens", force: :cascade do |t|
     t.string "device_id"
     t.string "version_name"
@@ -23,6 +23,7 @@ ActiveRecord::Schema[7.1].define(version: 2024_06_17_120343) do
     t.string "force_update", default: "false"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "source_ip"
   end
 
   create_table "device_details", force: :cascade do |t|
