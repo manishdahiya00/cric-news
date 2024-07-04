@@ -1,0 +1,45 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  device_details: one
+  device_type: MyString
+  device_name: MyString
+  social_type: MyString
+  social_id: MyString
+  social_email: MyString
+  social_name: MyString
+  social_img_url: MyString
+  advertising_id: MyString
+  version_name: MyString
+  version_code: MyString
+  utm_source: MyString
+  utm_medium: MyString
+  utm_term: MyString
+  utm_content: MyString
+  utm_campaign: MyString
+  referrer_url: MyString
+  security_token: MyString
+  source_ip: MyString
+  refer_code: MyString
+
+two:
+  device_details: two
+  device_type: MyString
+  device_name: MyString
+  social_type: MyString
+  social_id: MyString
+  social_email: MyString
+  social_name: MyString
+  social_img_url: MyString
+  advertising_id: MyString
+  version_name: MyString
+  version_code: MyString
+  utm_source: MyString
+  utm_medium: MyString
+  utm_term: MyString
+  utm_content: MyString
+  utm_campaign: MyString
+  referrer_url: MyString
+  security_token: MyString
+  source_ip: MyString
+  refer_code: MyString

@@ -1,0 +1,73 @@
+<!-- Page Content -->
+<div id="page-wrapper">
+  <div class="container-fluid">
+    <div class="row">
+      <p id="notice" style="color:orange;"><%= notice %></p>
+      <div class="col-lg-12 d-flex flex-row">
+        <h2 class="page-header" style="margin: 10px 0 15px !important;">User Details</h2>
+      </div>
+      <% if @user.present? %>
+        <table class="table table-responsive table-bordered">
+          <thead>
+            <tr>
+              <th>Id</th>
+              <th>User Image</th>
+              <th>User Email</th>
+              <th>User Name</th>
+              <th>Advertising Id</th>
+              <th>Device Details</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><%= @user.id %></td>
+              <td><img style="width:20px;" src="<%=@user.try(:social_img_url)%>" onerror="this.onerror=null;this.src='https://cdn.pixabay.com/photo/2014/03/24/17/21/wrong-295503_640.png';" /></td>
+              <td><%= @user.social_email %></td>
+              <td><%= @user.social_name %></td>
+              <td><%= @user.advertising_id %></td>
+              <td><a href="/admin/device_details/<%= DeviceDetail.find_by(device_id:@user.device_id).id %>"><%= @user.device_id %></a></td>
+            </tr>
+          </tbody>
+        </table>
+        <table class="table table-responsive table-bordered">
+          <thead>
+            <tr>
+              <th>Version Name</th>
+              <th>Version Code</th>
+              <th>UTM Source</th>
+              <th>UTM Medium</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><%= @user.version_name %></td>
+              <td><%= @user.version_code %></td>
+              <td><%= @user.utm_source %></td>
+              <td><%= @user.utm_medium %></td>
+            </tr>
+          </tbody>
+        </table>
+        <table class="table table-responsive table-bordered">
+          <thead>
+            <tr>
+              <th>UTM Campaign</th>
+              <th>UTM Content</th>
+              <th>UTM Term</th>
+              <th>Referrer URL</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><%= @user.utm_campaign %></td>
+              <td><%= @user.utm_content %></td>
+              <td><%= @user.utm_term %></td>
+              <td><%= @user.referrer_url %></td>
+            </tr>
+          </tbody>
+        </table>
+      <% else %>
+        <h1 class="not-found">user Not Found</h1>
+      <% end %>
+    </div>
+  </div>
+</div>

@@ -1,6 +1,7 @@
 module API
   class Base < Grape::API
     mount API::V1::DeviceDetails
+    mount API::V1::UserDetails
     mount API::V1::AppOpenApi
     mount API::V1::HomeApi
     mount API::V1::LiveMatchData

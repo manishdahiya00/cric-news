@@ -15,6 +15,7 @@
               <th>Device Type</th>
               <th>Device Name</th>
               <th>Advertising Id</th>
+              <th>Security Token</th>
             </tr>
           </thead>
           <tbody>
@@ -24,6 +25,7 @@
               <td><%= @device.device_type %></td>
               <td><%= @device.device_name %></td>
               <td><%= @device.advertising_id %></td>
+              <td><%= @device.security_token %></td>
             </tr>
           </tbody>
         </table>
@@ -88,6 +90,7 @@
             <% end %>
           </tbody>
         </table>
+        <%= will_paginate @appOpens %>
       <% else %>
         <h1 class="not-found">Device Not Found</h1>
       <% end %>

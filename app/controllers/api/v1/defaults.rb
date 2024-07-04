@@ -10,7 +10,6 @@ module API
     module Defaults
       extend Grape::API::Helpers
 
-
       MSG_SUCCESS = "Success"
       MSG_ERROR = "Error"
 
@@ -21,7 +20,6 @@ module API
 
         base.helpers do
           params :common_params do
-            # requires :userId, type: String, allow_blank: true
             requires :deviceId, type: String, allow_blank: false
             requires :securityToken, type: String, allow_blank: false
             requires :versionName, type: String, allow_blank: false
@@ -52,7 +50,7 @@ module API
                     location: match.venue_location,
                     country: match.venue_country,
                   },
-                  match_time: match.match_time
+                  match_time: match.match_time,
                 }
                 data << match_data
               end
@@ -80,7 +78,7 @@ module API
                   teamb_scores_full: match.teamb_scores_full,
                   teamb_scores: match.teamb_scores,
                   teamb_overs: match.teamb_overs,
-                  match_time: match.match_time
+                  match_time: match.match_time,
                 }
                 data << match_data
               end

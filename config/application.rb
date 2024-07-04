@@ -21,7 +21,9 @@ module CricNewsApp
     # These settings can be overridden in specific environments using the files
     # in config/environments, which are processed later.
     #
-    config.time_zone = 'New Delhi'
+    config.time_zone = "New Delhi"
     config.active_record.default_timezone = :local
+    config.hosts << "01b1-2401-4900-1c8a-86d1-8468-221a-8dde-ffe5.ngrok-free.app"
+    config.hosts << ""
   end
 end

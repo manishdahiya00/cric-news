@@ -8,6 +8,7 @@ Rails.application.routes.draw do
 
   namespace :admin do
     resources :device_details
+    resources :user_details
     resources :matches
   end
   mount API::Base => "/"
