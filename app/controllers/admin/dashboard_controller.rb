@@ -3,7 +3,7 @@ module Admin
     layout "admin"
 
     def index
-      @devices = DeviceDetail.count
+      @users = UserDetail.count
       @matches = Match.count
     end
   end

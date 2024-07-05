@@ -11,8 +11,8 @@ module API
         end
         post do
           begin
-            device = DeviceDetail.find_by(device_id: params[:deviceId], security_token: params[:securityToken])
-            if device.present?
+            user = UserDetail.find_by(id: params[:userId], security_token: params[:securityToken])
+            if user.present?
               liveMatches = fetch_matches("live")
               upcomingMatches = fetch_matches("upcoming")
               trendingNews = []
@@ -35,14 +35,16 @@ module API
               leagues_res = RestClient.get("https://rest.entitysport.com/v4/tournaments?token=e9a8cd857f01e5f88127787d3931b63a")
               leagues_data = JSON.parse(leagues_res)
               leagues_data["response"]["items"].each do |league|
+                image = ImagesHelper.search_league_image(league["name"])[2]
                 leagues << {
                   tournamentId: league["tournament_id"],
                   tournamentName: league["name"],
+                  image: image,
                 }
               end
               { status: 200, message: MSG_SUCCESS, liveMatches: liveMatches || [], upcomingMatches: upcomingMatches || [], trendingNews: trendingNews || [], leagues: leagues || [] }
             else
-              { status: 500, message: "No device Found" }
+              { status: 500, message: "No User Found" }
             end
           rescue Exception => e
             Rails.logger.error "API Exception => #{Time.now} --- homeApi --- Params: #{params.inspect}  Error: #{e.message}"

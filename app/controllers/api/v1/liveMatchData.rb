@@ -15,8 +15,8 @@ module API
         end
         post do
           begin
-            device = DeviceDetail.find_by(device_id: params[:deviceId], security_token: params[:securityToken])
-            if device.present?
+            user = UserDetail.find_by(id: params[:userId], security_token: params[:securityToken])
+            if user.present?
               require "rest-client"
               match_data_url = "https://rest.entitysport.com/v2/competitions/#{params[:compId]}/squads/#{params[:matchId]}?token=e9a8cd857f01e5f88127787d3931b63a"
               match_data_res = RestClient.get(match_data_url)
@@ -144,7 +144,7 @@ module API
               }
               { status: 200, message: MSG_SUCCESS, matchData: data, teama__batsman_total: teama_batsman_totals, teamb__batsman_total: teamb_batsman_totals, teama__bowlers_total: teama_bowlers_totals, teamb__bowlers_total: teamb_bowlers_totals }
             else
-              { status: 500, message: "No Device Found" }
+              { status: 500, message: "No User Found" }
             end
           rescue Exception => e
             Rails.logger.error "API Exception => #{Time.now} --- liveMatchDataApi --- Params: #{params.inspect}  Error: #{e.message}"

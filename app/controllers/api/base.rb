@@ -1,6 +1,5 @@
 module API
   class Base < Grape::API
-    mount API::V1::DeviceDetails
     mount API::V1::UserDetails
     mount API::V1::AppOpenApi
     mount API::V1::HomeApi
@@ -11,5 +10,6 @@ module API
     mount API::V1::AllPlayers
     mount API::V1::PlayerSearch
     mount API::V1::LeaguesData
+    mount API::V1::Profile
   end
 end

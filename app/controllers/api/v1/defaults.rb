@@ -12,6 +12,7 @@ module API
 
       MSG_SUCCESS = "Success"
       MSG_ERROR = "Error"
+      BASE_URL = "http:192.168.1.46:5000"
 
       def self.included(base)
         base.prefix :api
@@ -20,7 +21,7 @@ module API
 
         base.helpers do
           params :common_params do
-            requires :deviceId, type: String, allow_blank: false
+            requires :userId, type: String, allow_blank: false
             requires :securityToken, type: String, allow_blank: false
             requires :versionName, type: String, allow_blank: false
             requires :versionCode, type: String, allow_blank: false

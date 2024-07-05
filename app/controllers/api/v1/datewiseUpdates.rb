@@ -14,9 +14,9 @@ module API
 
         post do
           begin
-            @device_detail = DeviceDetail.find_by(device_id: params[:deviceId], security_token: params[:securityToken])
+            @user = UserDetail.find_by(id: params[:userId], security_token: params[:securityToken])
 
-            if @device_detail.present?
+            if @user.present?
               require "rest-client"
               news = []
               matches = []
@@ -53,9 +53,9 @@ module API
                   title: match.title,
                   short_title: match.short_title,
                   type: match.match_type,
-                  teama: match.teama_name[0,11] + "...",
+                  teama: match.teama_name[0, 11] + "...",
                   teama_logo: match.teama_logo,
-                  teamb: match.teamb_name[0,11] + "...",
+                  teamb: match.teamb_name[0, 11] + "...",
                   teamb_logo: match.teamb_logo,
                   venue: {
                     name: match.venue_name,
@@ -76,7 +76,7 @@ module API
 
               { status: 200, message: MSG_SUCCESS, news: news || [], matches: matches || [] }
             else
-              { status: 500, message: "No Device Found" }
+              { status: 500, message: "No User Found" }
             end
           rescue Exception => e
             Rails.logger.error "API Exception => #{Time.now} --- datewiseUpdates --- Params: #{params.inspect}  Error: #{e.message}"

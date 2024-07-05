@@ -17,13 +17,13 @@ module API
         post do
           begin
             require "rest-client"
-            @device_detail = DeviceDetail.find_by(device_id: params[:deviceId], security_token: params[:securityToken])
-            if @device_detail.present?
+            @user = UserDetail.find_by(id: params[:userId], security_token: params[:securityToken])
+            if @user.present?
               allPlayers = RestClient.get("https://rest.entitysport.com/v2/players?token=e9a8cd857f01e5f88127787d3931b63a&per_page=50&pages=#{params[:page]}")
               allPlayersData = JSON.parse(allPlayers)
               { status: 200, message: "Success", allPlayers: allPlayersData["response"]["items"] }
             else
-              { status: 500, message: "No device Found" }
+              { status: 500, message: "No User Found" }
             end
           rescue Exception => e
             Rails.logger.error "API Exception => #{Time.now} --- allPlayers --- Params: #{params.inspect}  Error: #{e.message}"

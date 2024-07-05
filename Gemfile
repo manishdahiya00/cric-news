@@ -70,3 +70,6 @@ gem "rest-client", "~> 2.1"
 gem "grape", "~> 2.0"
 gem "gemini-ai", "~> 4.0.0"
 gem "will_paginate"
+
+gem "nokogiri", "~> 1.16"
+gem "google-id-token", git: "https://github.com/google/google-id-token.git"

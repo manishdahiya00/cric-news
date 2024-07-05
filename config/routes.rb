@@ -7,7 +7,6 @@ Rails.application.routes.draw do
   delete "/admin/logout" => "admin/login#logout"
 
   namespace :admin do
-    resources :device_details
     resources :user_details
     resources :matches
   end

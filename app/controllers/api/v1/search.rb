@@ -9,7 +9,6 @@ module API
 
       resource :search do
         params do
-          # use :common_params
           requires :query, type: String, allow_blank: false
         end
         post do

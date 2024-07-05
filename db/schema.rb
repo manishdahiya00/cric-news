@@ -10,9 +10,9 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2024_07_04_070923) do
+ActiveRecord::Schema[7.1].define(version: 2024_07_05_092923) do
   create_table "app_opens", force: :cascade do |t|
-    t.string "device_id"
+    t.string "user_id"
     t.string "version_name"
     t.string "version_code"
     t.string "security_token"
@@ -24,25 +24,6 @@ ActiveRecord::Schema[7.1].define(version: 2024_07_04_070923) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string "source_ip"
-  end
-
-  create_table "device_details", force: :cascade do |t|
-    t.string "device_id"
-    t.string "device_type"
-    t.string "device_name"
-    t.string "advertising_id"
-    t.string "version_name"
-    t.string "version_code"
-    t.string "utm_source"
-    t.string "utm_medium"
-    t.string "utm_campaign"
-    t.string "utm_content"
-    t.string "utm_term"
-    t.string "referrer_url"
-    t.string "user_id"
-    t.string "security_token"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
   end
 
   create_table "matches", force: :cascade do |t|

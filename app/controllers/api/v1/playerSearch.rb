@@ -16,8 +16,8 @@ module API
 
         post do
           begin
-            @device_detail = DeviceDetail.find_by(device_id: params[:deviceId], security_token: params[:securityToken])
-            if @device_detail.present?
+            @user = UserDetail.find_by(id: params[:userId], security_token: params[:securityToken])
+            if @user.present?
               players = []
 
               case
@@ -47,7 +47,7 @@ module API
 
               { status: 200, message: "Success", allPlayers: players }
             else
-              { status: 500, message: "No device Found" }
+              { status: 500, message: "No User Found" }
             end
           rescue Exception => e
             Rails.logger.error "API Exception: #{e.message}"

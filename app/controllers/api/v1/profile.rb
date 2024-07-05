@@ -12,20 +12,14 @@ module API
 
         params do
           use :common_params
-          requires :userId, type: :String, allow_blank: false
         end
         post do
           begin
-            device = DeviceDetail.find_by(device_id: params[:deviceId], security_token: params[:securityToken])
-            if device.present?
-              user = UserDetail.find(params[:userId])
-              if user.present?
-                { status: 200, message: MSG_SUCCESS, name: user.social_name, email: user.social_email, profilePic: user.social_img_url }
-              else
-                { status: 500, message: "No User Found" }
-              end
+            user = UserDetail.find_by(id: params[:userId], security_token: params[:securityToken])
+            if user.present?
+              { status: 200, message: MSG_SUCCESS, name: user.social_name, email: user.social_email, profilePic: user.social_img_url }
             else
-              { status: 500, message: "No device Found" }
+              { status: 500, message: "No User Found" }
             end
           rescue Exception => e
             Rails.logger.error "API Exception => #{Time.now} --- profile --- Params: #{params.inspect}  Error: #{e.message}"

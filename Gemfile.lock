@@ -1,3 +1,10 @@
+GIT
+  remote: https://github.com/google/google-id-token.git
+  revision: ba413fe1fdcff59f177f44943e89a534cee7e26f
+  specs:
+    google-id-token (1.4.2)
+      jwt (>= 1)
+
 GEM
   remote: https://rubygems.org/
   specs:
@@ -321,9 +328,11 @@ DEPENDENCIES
   capybara
   debug
   gemini-ai (~> 4.0.0)
+  google-id-token!
   grape (~> 2.0)
   importmap-rails
   jbuilder
+  nokogiri (~> 1.16)
   puma (>= 5.0)
   rails (~> 7.1.3, >= 7.1.3.3)
   rest-client (~> 2.1)

@@ -17,14 +17,18 @@ module API
         post do
           begin
             require "rest-client"
-            @device_detail = DeviceDetail.find_by(device_id: params[:deviceId], security_token: params[:securityToken])
-            if @device_detail.present?
+            @user = UserDetail.find_by(id: params[:userId], security_token: params[:securityToken])
+            if @user.present?
               player_stats = RestClient.get("https://rest.entitysport.com/v2/players/#{params[:playerId]}/stats?token=e9a8cd857f01e5f88127787d3931b63a")
               player_stats_data = JSON.parse(player_stats)
               player_info = player_stats_data["response"]["player"]
+              image = ImagesHelper.search_player_image(player_info["first_name"])[2]
+              countryFlag = ImagesHelper.search_country_flag_image(player_info["nationality"])[2]
               playerInfoData = [
                 playerInfo: {
                   pid: player_info["pid"].to_s.presence || "--",
+                  playerImage: image || "--",
+                  countryFlag: countryFlag,
                   title: player_info["title"].to_s.presence || "--",
                   short_name: player_info["short_name"].to_s.presence || "--",
                   first_name: player_info["first_name"].to_s.presence || "--",
@@ -224,7 +228,7 @@ module API
 
               { status: 200, message: "Success", playerInfo: playerInfoData || [] }
             else
-              { status: 500, message: "No device Found" }
+              { status: 500, message: "No User Found" }
             end
           rescue Exception => e
             Rails.logger.error "API Exception => #{Time.now} --- playerData --- Params: #{params.inspect}  Error: #{e.message}"
