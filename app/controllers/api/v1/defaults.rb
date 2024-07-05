@@ -12,7 +12,6 @@ module API
 
       MSG_SUCCESS = "Success"
       MSG_ERROR = "Error"
-      BASE_URL = "http:192.168.1.46:5000"
 
       def self.included(base)
         base.prefix :api
