@@ -24,19 +24,22 @@ module API
               match_data = JSON.parse(match_data_res)
               scorecard_res = RestClient.get(scorecard_url)
               scorecard_data = JSON.parse(scorecard_res)
-              match = Match.find_by(mid: params[:matchId])
+              match_res = RestClient.get("https://rest.entitysport.com/v2/matches/#{params[:matchId]}/info?token=e9a8cd857f01e5f88127787d3931b63a")
+              matchData = JSON.parse(match_res)
+              match = matchData["response"]
               teama = match_data["response"]["squads"][0]["players"]
               teamb = match_data["response"]["squads"][1]["players"]
+              puts match
               data = {
-                teama_name: match.teama_name,
+                teama_name: match["teama"]["name"],
                 teama_short_name: match_data["response"]["squads"][0]["team"]["abbr"],
-                teamb_name: match.teamb_name,
+                teamb_name: match["teamb"]["name"],
                 teamb_short_name: match_data["response"]["squads"][1]["team"]["abbr"],
-                teama_logo: match.teama_logo,
-                teamb_logo: match.teamb_logo,
-                teama_scores: match.teama_scores_full,
-                teamb_scores: match.teamb_scores_full,
-                match_type: match.match_type,
+                teama_logo: match["teama"]["logo_url"],
+                teamb_logo: match["teamb"]["logo_url"],
+                teama_scores: match["teama"]["scores_full"],
+                teamb_scores: match["teama"]["scores"],
+                match_type: match["teama"]["format_str"],
                 teama_players: teama || [],
                 teamb_players: teamb || [],
                 scores: {
