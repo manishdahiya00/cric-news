@@ -88,27 +88,19 @@ module API
           begin
             ip_addr = request.ip
             if params[:email] == "testingyash8@gmail.com" && params[:password] == "yash@123"
-              user = User.find_by(social_email: params[:email])
+              user = UserDetail.find_by(social_email: params[:email])
               if user.present?
-                res = { message: MSG_SUCCESS, status: 200, userId: user.id, securityToken: user.security_token }
-                LogsHelper.logs(res, request)
-                return res
+                { message: MSG_SUCCESS, status: 200, userId: user.id, securityToken: user.security_token }
               else
-                new_user = User.create(social_name: "Testing Yash", social_email: params[:email], security_token: "acc7106fe5009609", source_ip: ip_addr, refer_code: SecureRandom.hex(6).upcase, social_img_url: "https://upload.wikimedia.org/wikipedia/commons/9/99/Sample_User_Icon.png")
-                res = { message: MSG_SUCCESS, status: 200, userId: new_user.id, securityToken: new_user.security_token }
-                logs(res)
-                return res
+                new_user = UserDetail.create(social_name: "Testing Yash", social_email: params[:email], security_token: "acc7106fe5009609", source_ip: ip_addr, refer_code: SecureRandom.hex(6).upcase, social_img_url: "https://upload.wikimedia.org/wikipedia/commons/9/99/Sample_User_Icon.png")
+                { message: MSG_SUCCESS, status: 200, userId: new_user.id, securityToken: new_user.security_token }
               end
             else
-              res = { message: "Invalid Email Or Password", status: 500 }
-              LogsHelper.logs(res, request)
-              return res
+              { message: "Invalid Email Or Password", status: 500 }
             end
           rescue Exception => e
             log = "API Exception - #{Time.now} - defaultUser - #{params.inspect} - Error - #{e}"
             Rails.logger.error log
-            LogsHelper.logs(log, request)
-            { status: 500, message: MSG_ERROR, error: e }
           end
         end
       end
