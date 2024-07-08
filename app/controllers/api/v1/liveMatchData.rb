@@ -18,36 +18,63 @@ module API
             user = UserDetail.find_by(id: params[:userId], security_token: params[:securityToken])
             if user.present?
               require "rest-client"
-              match_data_url = "https://rest.entitysport.com/v2/competitions/#{params[:compId]}/squads/#{params[:matchId]}?token=e9a8cd857f01e5f88127787d3931b63a"
-              match_data_res = RestClient.get(match_data_url)
-              scorecard_url = "https://rest.entitysport.com/v2/matches/#{params[:matchId]}/scorecard?token=e9a8cd857f01e5f88127787d3931b63a"
-              match_data = JSON.parse(match_data_res)
-              scorecard_res = RestClient.get(scorecard_url)
-              scorecard_data = JSON.parse(scorecard_res)
-              match_res = RestClient.get("https://rest.entitysport.com/v2/matches/#{params[:matchId]}/info?token=e9a8cd857f01e5f88127787d3931b63a")
-              matchData = JSON.parse(match_res)
-              match = matchData["response"]
-              teama = match_data["response"]["squads"][0]["players"]
-              teamb = match_data["response"]["squads"][1]["players"]
-              puts match
+
+              team = Team.find_by(mid: params[:matchId])
+              scorecard = Scorecard.find_by(mid: params[:matchId])
+              unless team.present? && scorecard.present?
+                match_data_url = "https://rest.entitysport.com/v2/competitions/#{params[:compId]}/squads/#{params[:matchId]}?token=e9a8cd857f01e5f88127787d3931b63a"
+                match_data_res = RestClient.get(match_data_url)
+                match_data = JSON.parse(match_data_res)
+                teama = match_data["response"]["squads"][0]["players"]
+                teamb = match_data["response"]["squads"][1]["players"]
+                match_res = RestClient.get("https://rest.entitysport.com/v2/matches/#{params[:matchId]}/info?token=e9a8cd857f01e5f88127787d3931b63a")
+                matchData = JSON.parse(match_res)
+                match = matchData["response"]
+                scorecard_url = "https://rest.entitysport.com/v2/matches/#{params[:matchId]}/scorecard?token=e9a8cd857f01e5f88127787d3931b63a"
+                scorecard_res = RestClient.get(scorecard_url)
+                scorecard_data = JSON.parse(scorecard_res)
+                team = Team.create(
+                  mid: params[:matchId],
+                  match_type: match["format_str"],
+                  teama_name: match_data["response"]["squads"][0]["team"]["title"],
+                  teamb_name: match_data["response"]["squads"][1]["team"]["title"],
+                  teama_abbr: match_data["response"]["squads"][0]["team"]["abbr"],
+                  teamb_abbr: match_data["response"]["squads"][1]["team"]["abbr"],
+                  teama_url: match_data["response"]["squads"][0]["team"]["logo_url"],
+                  teamb_url: match_data["response"]["squads"][1]["team"]["logo_url"],
+                  teama_scores: match["teama"]["scores_full"],
+                  teamb_scores: match["teamb"]["scores_full"],
+                  teama: match_data["response"]["squads"][0]["players"],
+                  teamb: match_data["response"]["squads"][1]["players"],
+                )
+                scorecard = Scorecard.create(
+                  mid: scorecard_data["response"]["match_id"],
+                  teama_id: scorecard_data["response"]["teama"]["team_id"],
+                  teamb_id: scorecard_data["response"]["teamb"]["team_id"],
+                  teama_innings: scorecard_data["response"]["innings"][0] || [],
+                  teamb_innings: scorecard_data["response"]["innings"][1] || [],
+                )
+              end
+
               data = {
-                teama_name: match["teama"]["name"],
-                teama_short_name: match_data["response"]["squads"][0]["team"]["abbr"],
-                teamb_name: match["teamb"]["name"],
-                teamb_short_name: match_data["response"]["squads"][1]["team"]["abbr"],
-                teama_logo: match["teama"]["logo_url"],
-                teamb_logo: match["teamb"]["logo_url"],
-                teama_scores: match["teama"]["scores_full"],
-                teamb_scores: match["teama"]["scores"],
-                match_type: match["teama"]["format_str"],
-                teama_players: teama || [],
-                teamb_players: teamb || [],
+                teama_name: team.teama_name,
+                teama_short_name: team.teama_abbr,
+                teamb_name: team.teamb_name,
+                teamb_short_name: team.teamb_abbr,
+                teama_logo: team.teama_url,
+                teamb_logo: team.teamb_url,
+                teama_scores: team.teama_scores,
+                teamb_scores: team.teamb_scores,
+                match_type: team.match_type,
+                teama_players: team.teama,
+                teamb_players: team.teamb,
                 scores: {
-                  teama: scorecard_data["response"]["innings"][0] || [],
-                  teamb: scorecard_data["response"]["innings"][1] || [],
+                  teama: scorecard.teama_innings || [],
+                  teamb: scorecard.teamb_innings || [],
                 },
               }
-              teama_innings = scorecard_data["response"]["innings"][0]
+              teama_innings = scorecard.teama_innings || []
+              teamb_innings = scorecard.teamb_innings || []
 
               teama_batsman_total_runs = 0
               teama_batsman_total_balls = 0
@@ -79,8 +106,6 @@ module API
                 teama_bowlers_total_strike_rate += bowler["strike_rate"].to_f
                 teama_bowlers_batsman_count += 1
               end
-
-              teamb_innings = scorecard_data["response"]["innings"][0]
 
               teamb_batsman_total_runs = 0
               teamb_batsman_total_balls = 0

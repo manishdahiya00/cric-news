@@ -1,0 +1,2 @@
+class LeagueDatum < ApplicationRecord
+end

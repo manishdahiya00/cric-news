@@ -36,20 +36,11 @@ module API
               matches = Match.where(status: "Upcoming")
               matches.each do |match|
                 match_data = {
-                  match_id: match.mid,
-                  competition_id: match.cid,
-                  title: match.title,
-                  short_title: match.short_title,
                   type: match.match_type,
                   teama: match.teama_name,
                   teama_logo: match.teama_logo,
                   teamb: match.teamb_name,
                   teamb_logo: match.teamb_logo,
-                  venue: {
-                    name: match.venue_name,
-                    location: match.venue_location,
-                    country: match.venue_country,
-                  },
                   match_time: match.match_time,
                 }
                 data << match_data
@@ -60,25 +51,17 @@ module API
                 match_data = {
                   match_id: match.mid,
                   competition_id: match.cid,
-                  title: match.title,
-                  short_title: match.short_title,
                   type: match.match_type,
                   teama: match.teama_name,
                   teama_logo: match.teama_logo,
                   teamb: match.teamb_name,
                   teamb_logo: match.teamb_logo,
-                  venue: {
-                    name: match.venue_name,
-                    location: match.venue_location,
-                    country: match.venue_country,
-                  },
                   teama_scores_full: match.teama_scores_full,
                   teama_scores: match.teama_scores,
                   teama_overs: match.teama_overs,
                   teamb_scores_full: match.teamb_scores_full,
                   teamb_scores: match.teamb_scores,
                   teamb_overs: match.teamb_overs,
-                  match_time: match.match_time,
                 }
                 data << match_data
               end

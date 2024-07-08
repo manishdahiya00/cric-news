@@ -32,14 +32,12 @@ module API
                   publishedAt: Time.parse(res["publishedAt"]).strftime("%d/%m/%y"),
                 }
               end
-              leagues_res = RestClient.get("https://rest.entitysport.com/v4/tournaments?token=e9a8cd857f01e5f88127787d3931b63a")
-              leagues_data = JSON.parse(leagues_res)
-              leagues_data["response"]["items"].each do |league|
-                image = ImagesHelper.search_league_image(league["name"])[2]
+              leagues_data = League.all
+              leagues_data.each do |league|
                 leagues << {
-                  tournamentId: league["tournament_id"],
-                  tournamentName: league["name"],
-                  image: image,
+                  tournamentId: league.tournament_id,
+                  tournamentName: league.tournament_name,
+                  image: league.image,
                 }
               end
               { status: 200, message: MSG_SUCCESS, liveMatches: liveMatches || [], upcomingMatches: upcomingMatches || [], trendingNews: trendingNews || [], leagues: leagues || [] }

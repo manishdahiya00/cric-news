@@ -1,0 +1,41 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  lid: MyString
+  matchDate: MyString
+  winning_team: MyString
+  logo: MyString
+  cid: MyString
+  mid: MyString
+  teama_id: MyString
+  teama_name: MyString
+  teama_abbr: MyString
+  teama_logo: MyString
+  teama_scores: MyString
+  teama_overs: MyString
+  teamb_id: MyString
+  teamb_name: MyString
+  teamb_abbr: MyString
+  teamb_logo: MyString
+  teamb_scores: MyString
+  teamb_overs: MyString
+
+two:
+  lid: MyString
+  matchDate: MyString
+  winning_team: MyString
+  logo: MyString
+  cid: MyString
+  mid: MyString
+  teama_id: MyString
+  teama_name: MyString
+  teama_abbr: MyString
+  teama_logo: MyString
+  teama_scores: MyString
+  teama_overs: MyString
+  teamb_id: MyString
+  teamb_name: MyString
+  teamb_abbr: MyString
+  teamb_logo: MyString
+  teamb_scores: MyString
+  teamb_overs: MyString
