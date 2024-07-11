@@ -3,14 +3,11 @@ module API
     class Search < Grape::API
       include API::V1::Defaults
 
-      #####################################################################
-      #############  ====>             Search API
-      #####################################################################
-
       resource :search do
         params do
           requires :query, type: String, allow_blank: false
         end
+
         post do
           begin
             res = []
@@ -23,16 +20,24 @@ module API
               },
               options: { model: "gemini-pro", server_sent_events: true },
             )
-
             response = client.stream_generate_content({
               contents: { role: "user", parts: { text: params[:query] } },
             })
-            res << response[0]["candidates"][0]["content"]["parts"][0]["text"]
+
+            if response && response[0] && response[0]["candidates"] &&
+               response[0]["candidates"][0] && response[0]["candidates"][0]["content"] &&
+               response[0]["candidates"][0]["content"]["parts"]
+              res << response[0]["candidates"][0]["content"]["parts"][0]["text"] || ""
+            else
+              res << "No response from AI"
+            end
+
             data = { ans: res }
-            { status: 200, message: MSG_SUCCESS, answer: data || [] }
+            { status: 200, message: MSG_SUCCESS, answer: data }
           rescue StandardError => e
             Rails.logger.error "API Exception => #{Time.now} --- searchApi --- Params: #{params.inspect}  Error: #{e.message}"
-            { status: 500, message: MSG_ERROR, error: e }
+            Rails.logger.error e.backtrace.join("\n")
+            { status: 500, message: MSG_ERROR, error: e.message }
           end
         end
       end

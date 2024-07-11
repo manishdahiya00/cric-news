@@ -12,7 +12,7 @@ module API
 
       MSG_SUCCESS = "Success"
       MSG_ERROR = "Error"
-
+      NEWS_API_KEY = ["820597b2a94047518bc024db797150d0", "c3d60ac64c52432cad1a4f43dd4ec732"]
       def self.included(base)
         base.prefix :api
         base.version :v1

@@ -2,7 +2,6 @@ module API
   module V1
     class HomeApi < Grape::API
       include API::V1::Defaults
-
       resource :home do
         before { api_params }
 
@@ -17,20 +16,46 @@ module API
               upcomingMatches = fetch_matches("upcoming")
               trendingNews = []
               leagues = []
-              require "rest-client"
-              news = RestClient.get("https://newsapi.org/v2/top-headlines?country=in&category=sports&q=cricket&apiKey=c3d60ac64c52432cad1a4f43dd4ec732")
-              news_response = JSON.parse(news)
-              news_response["articles"].each do |res|
-                trendingNews << {
-                  name: res["source"]["name"],
-                  author: res["author"],
-                  image: res["urlToImage"],
-                  title: res["title"],
-                  desc: res["description"],
-                  content: res["content"],
-                  url: res["url"],
-                  publishedAt: Time.parse(res["publishedAt"]).strftime("%d/%m/%y"),
-                }
+              news = News.where("published_at >= ?", Date.today - 1.day)
+              if news.empty?
+                require "rest-client"
+                response = RestClient.get("https://newsapi.org/v2/top-headlines?country=in&category=sports&q=cricket&apiKey=#{NEWS_API_KEY.sample}")
+                news_response = JSON.parse(response)
+                news_response["articles"].each do |res|
+                  trending_news = News.create(
+                    name: res["source"]["name"] || "",
+                    author: res["author"] || "",
+                    image: res["urlToImage"] || "",
+                    title: res["title"] || "",
+                    description: res["description"] || "",
+                    content: res["content"] || "",
+                    url: res["url"] || "",
+                    published_at: res["publishedAt"],
+                  )
+                  trendingNews << {
+                    name: trending_news.name || "",
+                    author: trending_news.author || "",
+                    image: trending_news.image || "",
+                    title: trending_news.title || "",
+                    description: trending_news.description || "",
+                    content: trending_news.content || "",
+                    url: trending_news.url || "",
+                    publishedAt: Time.parse(trending_news.published_at.to_s).strftime("%d/%m/%y") || "",
+                  }
+                end
+              else
+                news.each do |res|
+                  trendingNews << {
+                    name: res.name || "",
+                    author: res.author || "",
+                    image: res.image || "",
+                    title: res.title || "",
+                    description: res.description || "",
+                    content: res.content || "",
+                    url: res.url || "",
+                    publishedAt: Time.parse(res.published_at.to_s).strftime("%d/%m/%y") || "",
+                  }
+                end
               end
               leagues_data = League.all
               leagues_data.each do |league|
@@ -46,7 +71,7 @@ module API
             end
           rescue Exception => e
             Rails.logger.error "API Exception => #{Time.now} --- homeApi --- Params: #{params.inspect}  Error: #{e.message}"
-            { status: 500, message: MSG_ERROR, error: e }
+            { status: 500, message: MSG_ERROR, error: e.message }
           end
         end
       end
