@@ -9,6 +9,8 @@ Rails.application.routes.draw do
   namespace :admin do
     resources :user_details
     resources :matches
+    resources :leagues
+    resources :news
   end
   mount API::Base => "/"
 end

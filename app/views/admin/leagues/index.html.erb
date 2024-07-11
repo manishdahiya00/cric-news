@@ -1,0 +1,36 @@
+<div id="page-wrapper">
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-lg-12">
+        <h2 class="page-header">Leagues Index</h2>
+      </div>
+      <div class="col-lg-12">
+        <% if @leagues.any? %>
+          <table class="table table-responsive table-bordered">
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>Tournament Id</th>
+                <th>Tournament Name</th>
+                <th>Tournament Image</th>
+              </tr>
+            </thead>
+            <tbody>
+              <% @leagues.each do |league| %>
+                <tr>
+                  <td><%= league.id %></td>
+                  <td><%= league.tournament_id %></td>
+                  <td><%= league.tournament_name %></td>
+                  <td><img style="width:20px;" src="<%=league.try(:image)%>" onerror="this.onerror=null;this.src='https://cdn.pixabay.com/photo/2014/03/24/17/21/wrong-295503_640.png';" /></td>
+                </tr>
+              <% end %>
+            </tbody>
+          </table>
+          <%= will_paginate @matches %>
+        <% else %>
+          <h3>No matches found.</h3>
+        <% end %>
+      </div>
+    </div>
+  </div>
+</div>

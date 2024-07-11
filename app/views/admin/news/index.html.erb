@@ -1,0 +1,41 @@
+<div id="page-wrapper">
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-lg-12">
+        <h2 class="page-header">News Index</h2>
+      </div>
+      <div class="col-lg-12">
+        <% if @news_data.any? %>
+          <table class="table table-responsive table-bordered">
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>Name</th>
+                <th>Author</th>
+                <th>Image</th>
+                <th>Title</th>
+                <th>Published At</th>
+              </tr>
+            </thead>
+            <tbody>
+              <% @news_data.each do |news| %>
+                <tr>
+                  <td><%= news.id %></td>
+                  <td><%= news.name %></td>
+                  <td><%= news.author[0,25]+"..." %></td>
+                  <td><a href="<%= news.url %>" target="_blank">Show News</a></td>
+                  <td><img style="width:20px;" src="<%=news.try(:image)%>" onerror="this.onerror=null;this.src='https://cdn.pixabay.com/photo/2014/03/24/17/21/wrong-295503_640.png';" /></td>
+                  <td><%= news.title[0,50]+"..." %></td>
+                  <td><%= news.published_at %></td>
+                </tr>
+              <% end %>
+            </tbody>
+          </table>
+          <%= will_paginate @news_data %>
+        <% else %>
+          <h3>No News found.</h3>
+        <% end %>
+      </div>
+    </div>
+  </div>
+</div>

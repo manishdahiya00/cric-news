@@ -5,6 +5,8 @@ module Admin
     def index
       @users = UserDetail.count
       @matches = Match.count
+      @leagues = League.count
+      @news = News.count
     end
   end
 end
