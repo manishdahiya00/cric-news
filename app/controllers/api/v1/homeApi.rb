@@ -22,6 +22,7 @@ module API
                 response = RestClient.get("https://newsapi.org/v2/top-headlines?country=in&category=sports&q=cricket&apiKey=#{NEWS_API_KEY.sample}")
                 news_response = JSON.parse(response)
                 news_response["articles"].each do |res|
+                  puts res
                   trending_news = News.create(
                     name: res["source"]["name"] || "",
                     author: res["author"] || "",

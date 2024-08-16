@@ -11,5 +11,6 @@ module API
     mount API::V1::PlayerSearch
     mount API::V1::LeaguesData
     mount API::V1::Profile
+    mount API::V1::NewsDetails
   end
 end
