@@ -64,7 +64,7 @@ module API
         end
 
         def fetch_news_from_api(date_from, date_to)
-          url = "https://newsapi.org/v2/top-headlines?country=in&category=sports&q=cricket&from=#{date_from}&to=#{date_to}&apiKey=#{NEWS_API_KEY.sample}"
+          url = "https://newsapi.org/v2/everything?q=cricket&from=#{date_from}&to=#{date_to}&apiKey=#{NEWS_API_KEY.sample}"
           response = RestClient.get(url)
           JSON.parse(response.body)["articles"]
         end

@@ -19,7 +19,7 @@ module API
               news = News.where("published_at >= ?", Date.today - 1.day)
               if news.empty?
                 require "rest-client"
-                response = RestClient.get("https://newsapi.org/v2/top-headlines?country=in&category=sports&q=cricket&apiKey=#{NEWS_API_KEY.sample}")
+                response = RestClient.get("https://newsapi.org/v2/everything?q=cricket&apiKey=#{NEWS_API_KEY.sample}")
                 news_response = JSON.parse(response)
                 news_response["articles"].each do |res|
                   puts res
