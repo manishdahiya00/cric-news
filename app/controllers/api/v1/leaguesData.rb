@@ -84,9 +84,9 @@ module API
                   end
                 end
 
-                { status: 200, message: MSG_SUCCESS, teams: teams }
+                { status: 200, message: MSG_SUCCESS, teams: teams.take(20) }
               else
-                teams = league_data.map do |league|
+                teams = league_data.limit(20).map do |league|
                   {
                     matchDate: league.matchDate,
                     winningTeam: league.winning_team,
