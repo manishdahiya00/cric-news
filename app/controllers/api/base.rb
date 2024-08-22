@@ -12,5 +12,6 @@ module API
     mount API::V1::LeaguesData
     mount API::V1::Profile
     mount API::V1::NewsDetails
+    mount API::V1::ShortsVideos
   end
 end
