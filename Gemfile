@@ -3,7 +3,7 @@ source "https://rubygems.org"
 ruby "3.2.3"
 
 # Bundle edge Rails instead: gem "rails", github: "rails/rails", branch: "main"
-gem "rails", "~> 7.1.3", ">= 7.1.3.3"
+gem "rails", "~> 7.1.3", ">= 7.1.3.4"
 
 # The original asset pipeline for Rails [https://github.com/rails/sprockets-rails]
 gem "sprockets-rails"
@@ -72,4 +72,5 @@ gem "gemini-ai", "~> 4.0.0"
 gem "will_paginate"
 
 gem "nokogiri", "~> 1.16"
-gem "google-id-token", git: "https://github.com/google/google-id-token.git"
+gem "google-id-token"
+gem "whenever", require: false

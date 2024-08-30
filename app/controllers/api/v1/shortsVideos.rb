@@ -19,10 +19,10 @@ module API
 
             require "rest-client"
             @res = RestClient.post(
-              "https://orilshorts.app/api/v1/reelsList",
+              "http://localhost:5000/api/v1/cricketReels",
               {
-                userId: "3",
-                securityToken: "e493890d-fa6d-4670-85c2-348afb3f791d",
+                userId: "1",
+                securityToken: "1",
                 versionName: "1",
                 versionCode: "1",
                 page: params[:page],
@@ -30,16 +30,14 @@ module API
               { content_type: :json, accept: :json }
             )
 
+            puts @res
             @reels = JSON.parse(@res.body)["reels"]
             @shorts = []
             @reels.each do |reel|
-              puts reel
-              if reel["reelDescription"].include?("cricket")
-                @shorts << {
-                  reelId: reel["reelId"],
-                  reelUrl: reel["videoUrl"],
-                }
-              end
+              @shorts << {
+                reelId: reel["reelId"],
+                reelUrl: reel["videoUrl"],
+              }
             end
             { status: 200, message: MSG_SUCCESS, shorts: @shorts || [] }
           rescue StandardError => e
